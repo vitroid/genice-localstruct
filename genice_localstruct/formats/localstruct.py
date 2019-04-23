@@ -90,7 +90,7 @@ def Eta(lattice):
             D2 = np.dot(D2, cell.mat)
             D2 = np.linalg.norm(D2, axis=1)
 
-            first2 = np.max(D2)
+            first2 = np.min(D2)
             op[i] = first2 - last1
     return op
 
