@@ -95,6 +95,31 @@ def Eta(lattice):
     return op
 
 
+####### Bond anisotropy
+
+def Bani(lattice):
+    lattice.logger.info("  Bond anisotropy.")
+    cell = lattice.repcell 
+    positions = lattice.reppositions
+    graph = nx.Graph(lattice.graph)
+    op = np.zeros(positions.shape[0])
+    for i in graph:
+        vecs = np.array([positions[j] - positions[i] for j in graph[i]])
+        lattice.logger.debug(vecs)
+        vecs -= np.floor(vecs+0.5)
+        vecs = vecs @ cell.mat
+        norm = np.linalg.norm(vecs, axis=1)
+        lattice.logger.debug(norm)
+        vecs[:,0] /= norm
+        vecs[:,1] /= norm
+        vecs[:,2] /= norm
+        norm = np.linalg.norm(vecs, axis=1)
+        lattice.logger.debug(norm)
+        bani = np.sum(vecs,axis=0)
+        op[i] = np.linalg.norm(bani)
+    return op
+
+
 
         
     
@@ -110,10 +135,11 @@ def hook2(lattice):
     global qtet, g5
     lattice.logger.info("Hook2: Network indices.")
     eta  = Eta(lattice)
+    bani = Bani(lattice)
     lattice.logger.info("Hook2: Done.")
 
     print("# Qtet G5 eta")
-    np.savetxt(sys.stdout, np.vstack([qtet,g5,eta]).T, fmt='%.5f')
+    np.savetxt(sys.stdout, np.vstack([qtet,g5,eta,bani]).T, fmt='%.5f')
     
     
 
