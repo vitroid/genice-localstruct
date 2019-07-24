@@ -38,14 +38,11 @@ setup(
     ],
     
     entry_points = {
-        'genice_format_hook1': [
-            'localstruct = genice_localstruct.formats.localstruct:hook1',
-        ],
-        'genice_format_hook2': [
-            'localstruct  = genice_localstruct.formats.localstruct:hook2',
+        'genice_format': [
+            'localstruct = genice_localstruct.formats.localstruct',
         ],
     },
-    install_requires=['genice>=0.23',],
+    install_requires=['genice>=0.25',],
 
     license='MIT',
 )
